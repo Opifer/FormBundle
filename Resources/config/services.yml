@@ -1,4 +1,5 @@
 parameters:
+    opifer.form.attachment_listener.class: Opifer\FormBundle\EventListener\AttachmentListener
     opifer.form.form_extension.class: Opifer\FormBundle\Twig\FormExtension
     opifer.form.form_manager.class: Opifer\FormBundle\Model\FormManager
     opifer.form.form_form.class: Opifer\FormBundle\Form\Type\FormType
@@ -48,6 +49,12 @@ services:
             - { name: twig.extension }
 
     # Event Listeners
+
+    opifer.form.attachment_listener:
+        class: %opifer.form.attachment_listener.class%
+        arguments: [@opifer.media.media_manager]
+        tags:
+            - { name: kernel.event_subscriber }
 
     opifer.form.notification_mail_listener:
         class: %opifer.form.notification_mail_listener.class%
