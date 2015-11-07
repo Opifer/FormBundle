@@ -173,10 +173,10 @@ class FormController extends Controller
         $postForm->handleRequest($request);
 
         if ($postForm->isSubmitted() && $postForm->isValid()) {
+            $this->get('opifer.form.post_manager')->save($post);
+
             $event = new FormSubmitEvent($post);
             $this->get('event_dispatcher')->dispatch(Events::POST_FORM_SUBMIT, $event);
-
-            $this->get('opifer.form.post_manager')->save($post);
             
             if ($form->getRedirectUrl()) {
                 return $this->redirect($form->getRedirectUrl());

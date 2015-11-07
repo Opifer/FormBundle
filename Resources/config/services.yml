@@ -52,7 +52,7 @@ services:
 
     opifer.form.attachment_listener:
         class: %opifer.form.attachment_listener.class%
-        arguments: [@opifer.media.media_manager]
+        arguments: [@doctrine.orm.default_entity_manager, @opifer.media.media_manager]
         tags:
             - { name: kernel.event_subscriber }
 

@@ -9,7 +9,13 @@
         {% for key, value in post.valueset.namedvalues %}
             <tr>
                 <td>{{ value.attribute.displayName }}</td>
-                <td>{{ value }}</td>
+                <td>
+                    {% if value is 'attachment' %}
+                        <a href="{{ asset('uploads/' ~ value) }}"
+                    {% else %}
+                        {{ value }}
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>

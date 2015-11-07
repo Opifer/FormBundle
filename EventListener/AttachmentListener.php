@@ -2,6 +2,7 @@
 
 namespace Opifer\FormBundle\EventListener;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Opifer\EavBundle\Entity\AttachmentValue;
 use Opifer\FormBundle\Event\Events;
 use Opifer\FormBundle\Event\FormSubmitEvent;
@@ -10,11 +11,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AttachmentListener implements EventSubscriberInterface
 {
+    /** @var EntityManagerInterface */
+    protected $entityManager;
+
     /** @var MediaManagerInterface */
     protected $mediaManager;
 
-    function __construct(MediaManagerInterface $mediaManager)
+    function __construct(EntityManagerInterface $entityManager, MediaManagerInterface $mediaManager)
     {
+        $this->entityManager = $entityManager;
         $this->mediaManager = $mediaManager;
     }
 
@@ -30,6 +35,8 @@ class AttachmentListener implements EventSubscriberInterface
         $post = $event->getPost();
         $values = $post->getValueSet()->getValues();
 
+        $this->entityManager->refresh($post);
+
         foreach ($values as $value)
         {
             if ($value instanceof AttachmentValue) {
@@ -40,5 +47,8 @@ class AttachmentListener implements EventSubscriberInterface
                 $value->setAttachment($media);
             }
         }
+
+        $this->entityManager->persist($post);
+        $this->entityManager->flush();
     }
 }
