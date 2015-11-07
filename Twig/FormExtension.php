@@ -2,6 +2,8 @@
 
 namespace Opifer\FormBundle\Twig;
 
+use Opifer\EavBundle\Entity\AttachmentValue;
+use Opifer\EavBundle\Entity\Value;
 use Opifer\EavBundle\Manager\EavManager;
 use Opifer\FormBundle\Model\FormInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -33,6 +35,16 @@ class FormExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('create_form_view', [$this, 'createFormView']),
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTests ()
+    {
+        return [
+            new \Twig_SimpleTest('attachment', function (Value $value) { return $value instanceof AttachmentValue; }),
         ];
     }
 
